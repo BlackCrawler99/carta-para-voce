@@ -1,0 +1,320 @@
+<style>
+  :root{
+    --ground:#150e0b;
+    --ground-glow:#3a2416;
+    --leather:#a67c4e;
+    --leather-dark:#7c5a34;
+    --leather-edge:#5e421f;
+    --paper:#f7f0e2;
+    --paper-shadow:#d8cbb0;
+    --ink:#3c2a1e;
+    --ink-soft:#7a6552;
+    --accent:#b6402f;
+    --accent-soft:#e0a98f;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html,body{ height:100%; }
+
+  body{
+    width:100%;
+    min-height:100%;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 42%, var(--ground-glow) 0%, transparent 70%),
+      repeating-linear-gradient(115deg, rgba(255,255,255,0.012) 0px, rgba(255,255,255,0.012) 1px, transparent 1px, transparent 3px),
+      var(--ground);
+    color:var(--ink);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:clamp(1.1rem, 4vh, 2rem);
+    padding:2rem 1rem;
+    font-family: 'Iowan Old Style', 'Palatino Linotype', Georgia, serif;
+    overflow-x:hidden;
+  }
+
+  .stage{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:1.4rem;
+    width:100%;
+  }
+
+  .hint{
+    color:#c9b9a4;
+    font-family:'Segoe Script','Bradley Hand','Comic Sans MS',cursive;
+    font-size:clamp(1rem, 2.4vw, 1.3rem);
+    letter-spacing:0.02em;
+    text-align:center;
+    opacity:0.85;
+    transition:opacity 0.6s ease;
+    min-height:1.6em;
+  }
+  .hint.is-hidden{ opacity:0; }
+
+  .envelope{
+    position:relative;
+    width:min(84vw, 21rem);
+    height:min(60vw, 15rem);
+    filter:drop-shadow(0 1.5rem 2.5rem rgba(0,0,0,0.55));
+  }
+
+  @media (min-width:640px){
+    .envelope{ width:26rem; height:18.5rem; }
+  }
+
+  .envelope__back{
+    position:absolute; inset:0;
+    border-radius:0.6rem;
+    background:linear-gradient(155deg, var(--leather-dark), #634321);
+    clip-path:polygon(0% 0%, 100% 0%, 90% 100%, 0% 90%);
+    z-index:10;
+  }
+
+  .envelope__front{
+    position:absolute; inset:0;
+    border-radius:0.6rem;
+    border:0.3rem solid var(--leather-edge);
+    background:linear-gradient(165deg, var(--leather), #8e6a3f);
+    clip-path:polygon(100% 0%, 50% 68%, 0% 0%, 0% 100%, 100% 100%);
+    z-index:30;
+  }
+
+  .envelope__flap{
+    position:relative;
+    width:100%; height:100%;
+    border-radius:0.6rem;
+    background:linear-gradient(160deg, var(--leather-dark), #5e421f);
+    clip-path:polygon(0% 0%, 100% 0%, 50% 79%);
+    z-index:40;
+    transform-origin:top center;
+    transition:transform 0.35s cubic-bezier(.61,-0.02,.7,1.02);
+  }
+  .envelope__flap.dip{ transform:translateY(2%); }
+  .envelope__flap.folded{
+    transform:translateY(-96%) rotate(180deg);
+    clip-path:polygon(0% 0%, 100% 0%, 50% 58%);
+    z-index:20;
+  }
+
+  .seal{
+    position:absolute;
+    width:3.1rem; height:3.1rem;
+    left:50%; top:29%;
+    transform:translate(-50%,-50%);
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #cf6650, var(--accent) 65%, #7a2418 100%);
+    box-shadow:0 0.3rem 0.6rem rgba(0,0,0,0.45), inset 0 0.1rem 0.2rem rgba(255,255,255,0.25);
+    z-index:50;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    transition:left 0.45s ease, opacity 0.45s ease, transform 0.45s ease;
+  }
+  .seal:hover{ transform:translate(-50%,-50%) scale(1.05); }
+  .seal.cut{
+    left:-15%;
+    opacity:0;
+    pointer-events:none;
+  }
+  @media (prefers-reduced-motion: no-preference){
+    .seal:not(.cut){ animation:seal-breathe 3.2s ease-in-out infinite; }
+  }
+  @keyframes seal-breathe{
+    0%,100%{ box-shadow:0 0.3rem 0.6rem rgba(0,0,0,0.45), 0 0 0 0 rgba(214,105,80,0.35); }
+    50%{ box-shadow:0 0.3rem 0.6rem rgba(0,0,0,0.45), 0 0 0.5rem 0.35rem rgba(214,105,80,0.25); }
+  }
+
+  .seal .heart{
+    position:relative;
+    width:0.7rem; height:0.7rem;
+    transform:rotate(-45deg);
+    background:#f3d9ce;
+    opacity:0.9;
+  }
+  .seal .heart::before, .seal .heart::after{
+    content:'';
+    position:absolute;
+    width:0.7rem; height:0.7rem;
+    border-radius:50%;
+    background:#f3d9ce;
+  }
+  .seal .heart::before{ top:-0.35rem; left:0; }
+  .seal .heart::after{ left:0.35rem; top:0; }
+
+  .seal-remnant{
+    position:absolute;
+    width:1.1rem; height:1.1rem;
+    left:78%; top:31%;
+    transform:translate(-50%,-50%) rotate(12deg);
+    border-radius:50%;
+    background:radial-gradient(circle at 35% 30%, #b5533f, #7a2418 80%);
+    box-shadow:inset 0 0.05rem 0.15rem rgba(255,255,255,0.2);
+    z-index:35;
+  }
+
+  .envelope__flap.openable{ cursor:pointer; }
+
+  .content{
+    position:absolute; inset:0;
+    z-index:15;
+    height:100%;
+    transition:height 0.55s ease;
+    overflow:visible;
+  }
+  .content.expanded{ height:118%; }
+
+  .notes{
+    width:100%; height:100%;
+    position:relative;
+  }
+
+  .note{
+    width:92%;
+    left:4%;
+    height:26%;
+    position:absolute;
+    background:linear-gradient(180deg, var(--paper), #eee3cd);
+    border-radius:0.25rem;
+    box-shadow:0 0.35rem 0.9rem rgba(0,0,0,0.4), 0 0 0 1px var(--paper-shadow) inset;
+    overflow:hidden;
+    cursor:pointer;
+    transition:height 0.45s ease, box-shadow 0.3s ease, transform 0.3s ease;
+    pointer-events:none;
+  }
+  .content.expanded .note{ pointer-events:auto; }
+
+  .note:nth-child(1){ bottom:58%; z-index:1; }
+  .note:nth-child(2){ bottom:38%; z-index:2; }
+  .note:nth-child(3){ bottom:18%; z-index:3; }
+
+  .note:hover{ box-shadow:0 0.5rem 1.2rem rgba(0,0,0,0.5), 0 0 0 1px var(--paper-shadow) inset; }
+
+  .note.active{
+    height:88%;
+    z-index:9;
+  }
+
+  .note__eyebrow{
+    font-family:'Segoe Script','Bradley Hand','Comic Sans MS',cursive;
+    color:var(--accent);
+    font-size:0.75rem;
+    letter-spacing:0.04em;
+    text-align:center;
+    padding-top:0.6rem;
+    opacity:0.75;
+  }
+
+  .note__text{
+    padding:0.4rem 1.1rem 1rem;
+  }
+
+  .note__text p{
+    font-size:0.82rem;
+    line-height:1.5;
+    color:var(--ink);
+    text-align:center;
+    margin-bottom:0.8rem;
+  }
+
+  @media (min-width:480px){
+    .note__text p{ font-size:0.95rem; }
+  }
+  @media (min-width:640px){
+    .note__text p{ font-size:1.08rem; }
+    .note__eyebrow{ font-size:0.85rem; }
+  }
+
+  .signature{
+    font-family:'Segoe Script','Bradley Hand','Comic Sans MS',cursive;
+    color:var(--accent-soft);
+    font-size:clamp(1.1rem, 2.6vw, 1.5rem);
+    text-align:center;
+    opacity:0;
+    transform:translateY(0.4rem);
+    transition:opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s;
+  }
+  .signature.visible{ opacity:1; transform:translateY(0); }
+</style>
+
+<div class="stage">
+  <div class="envelope" id="envelope">
+    <div class="envelope__back"></div>
+    <div class="envelope__front"></div>
+    <div class="envelope__flap" id="flap"></div>
+    <div class="seal-remnant"></div>
+    <div class="seal" id="seal"><span class="heart"></span></div>
+    <div class="content" id="content">
+      <div class="notes">
+        <div class="note" id="note1">
+          <div class="note__eyebrow">nota 1 de 3</div>
+          <div class="note__text">
+            <p>Oi minha princesa, aqui estamos completando mais um mês juntos, é sempre uma alegria poder acordar e saber que tenho você ao meu lado e sentir que isso será para sempre é magnífico</p>
+          </div>
+        </div>
+        <div class="note" id="note2">
+          <div class="note__eyebrow">nota 2 de 3</div>
+          <div class="note__text">
+            <p>quero que eles nunca acabem e que tenham sempre muitos outros pela frente.</p>
+          </div>
+        </div>
+        <div class="note" id="note3">
+          <div class="note__eyebrow">nota 3 de 3</div>
+          <div class="note__text">
+            <p>você é a melhor coisa que me aconteceu, obrigado por me escolher todos os dias.</p>
+            <p>Te amo muito! &hearts;.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hint" id="hint">toque no selo de cera para abrir</div>
+  <div class="signature" id="signature">Com amor, sempre.</div>
+</div>
+
+<script>
+  const seal = document.getElementById('seal');
+  const flap = document.getElementById('flap');
+  const content = document.getElementById('content');
+  const hint = document.getElementById('hint');
+  const signature = document.getElementById('signature');
+  const notes = document.querySelectorAll('.note');
+
+  seal.addEventListener('click', function onSealClick(){
+    seal.classList.add('cut');
+    seal.removeEventListener('click', onSealClick);
+    hint.textContent = 'agora abra a aba do envelope';
+    flap.classList.add('openable');
+    flap.addEventListener('click', onFlapClick);
+  });
+
+  function onFlapClick(){
+    flap.classList.add('dip');
+    flap.removeEventListener('click', onFlapClick);
+    flap.classList.remove('openable');
+    setTimeout(function(){
+      flap.classList.remove('dip');
+      flap.classList.add('folded');
+      content.classList.add('expanded');
+      hint.classList.add('is-hidden');
+      notes.forEach(function(note){
+        note.addEventListener('click', function(){
+          note.dataset.seen = 'true';
+          const wasActive = note.classList.contains('active');
+          notes.forEach(function(n){ n.classList.remove('active'); });
+          if(!wasActive){
+            note.classList.add('active');
+          }
+          const allSeen = Array.prototype.every.call(notes, function(n){
+            return n.dataset.seen === 'true';
+          });
+          if(allSeen){
+            signature.classList.add('visible');
+          }
+        });
+      });
+    }, 350);
+  }
+</script>
