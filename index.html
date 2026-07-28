@@ -250,11 +250,13 @@
   }
   .song-code.visible{ opacity:1; transform:translateY(0); }
 
-  .song-code__label{
-    font-family:'Segoe Script','Bradley Hand','Comic Sans MS',cursive;
-    color:var(--accent-soft);
-    font-size:1rem;
-    opacity:0.85;
+  .song-code__cover{
+    display:block;
+    width:6.5rem;
+    height:6.5rem;
+    object-fit:cover;
+    border-radius:0.4rem;
+    box-shadow:0 0.3rem 0.7rem rgba(0,0,0,0.4);
   }
 
   .song-code a{
@@ -315,7 +317,9 @@
   <div class="hint" id="hint">toque no selo de cera para abrir</div>
   <div class="signature" id="signature">Com amor, sempre.</div>
   <div class="song-code" id="songCode">
-    <div class="song-code__label">nossa música</div>
+    <a href="https://open.spotify.com/track/6QyWVCLASvvtpKD0KJZs5e" target="_blank" rel="noopener">
+      <img class="song-code__cover" src="https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e027b721cc07343a236c7d6da55" alt="Capa do álbum" width="104" height="104">
+    </a>
     <a href="https://open.spotify.com/track/6QyWVCLASvvtpKD0KJZs5e" target="_blank" rel="noopener">
       <img src="https://scannables.scdn.co/uri/plain/svg/f7f0e2/black/640/spotify:track:6QyWVCLASvvtpKD0KJZs5e" alt="Código Spotify para tocar a música" width="152" height="152">
     </a>
