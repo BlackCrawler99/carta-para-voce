@@ -158,13 +158,14 @@
   .envelope__flap.openable{ cursor:pointer; }
 
   .content{
-    position:absolute; inset:0;
+    position:absolute;
+    bottom:0; left:0; right:0;
     z-index:15;
     height:100%;
     transition:height 0.55s ease;
     overflow:visible;
   }
-  .content.expanded{ height:118%; }
+  .content.expanded{ height:130%; z-index:45; }
 
   .notes{
     width:100%; height:100%;
@@ -174,7 +175,7 @@
   .note{
     width:92%;
     left:4%;
-    height:26%;
+    height:22%;
     position:absolute;
     background:linear-gradient(180deg, var(--paper), #eee3cd);
     border-radius:0.25rem;
@@ -187,8 +188,8 @@
   .content.expanded .note{ pointer-events:auto; }
 
   .note:nth-child(1){ bottom:58%; z-index:1; }
-  .note:nth-child(2){ bottom:38%; z-index:2; }
-  .note:nth-child(3){ bottom:18%; z-index:3; }
+  .note:nth-child(2){ bottom:33%; z-index:2; }
+  .note:nth-child(3){ bottom:8%; z-index:3; }
 
   .note:hover{ box-shadow:0 0.5rem 1.2rem rgba(0,0,0,0.5), 0 0 0 1px var(--paper-shadow) inset; }
 
@@ -237,6 +238,47 @@
     transition:opacity 0.8s ease 0.3s, transform 0.8s ease 0.3s;
   }
   .signature.visible{ opacity:1; transform:translateY(0); }
+
+  .song-code{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0.5rem;
+    opacity:0;
+    transform:translateY(0.4rem);
+    transition:opacity 0.8s ease 0.5s, transform 0.8s ease 0.5s;
+  }
+  .song-code.visible{ opacity:1; transform:translateY(0); }
+
+  .song-code__label{
+    font-family:'Segoe Script','Bradley Hand','Comic Sans MS',cursive;
+    color:var(--accent-soft);
+    font-size:1rem;
+    opacity:0.85;
+  }
+
+  .song-code a{
+    display:block;
+    border-radius:0.5rem;
+    box-shadow:0 0.35rem 0.9rem rgba(0,0,0,0.4);
+    transition:transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .song-code a:hover, .song-code a:focus-visible{
+    transform:scale(1.03);
+    box-shadow:0 0.5rem 1.2rem rgba(0,0,0,0.5);
+  }
+  .song-code img{
+    display:block;
+    width:9.5rem;
+    border-radius:0.5rem;
+  }
+
+  .song-code__hint{
+    font-size:0.78rem;
+    color:#c9b9a4;
+    text-decoration:underline;
+    text-underline-offset:0.15rem;
+  }
 </style>
 
 <div class="stage">
@@ -251,19 +293,19 @@
         <div class="note" id="note1">
           <div class="note__eyebrow">nota 1 de 3</div>
           <div class="note__text">
-            <p>Oi minha princesa, aqui estamos completando mais um mês juntos, é sempre uma alegria poder acordar e saber que tenho você ao meu lado e sentir que isso será para sempre é magnífico</p>
+            <p>Oi minha princesa, é sempre uma alegria poder acordar e saber que tenho você ao meu lado....sentir que isso sincero é magnífico.</p>
           </div>
         </div>
         <div class="note" id="note2">
           <div class="note__eyebrow">nota 2 de 3</div>
           <div class="note__text">
-            <p>quero que eles nunca acabem e que tenham sempre muitos outros pela frente.</p>
+            <p>Em tão pouco tempo você preencheu meu coração com um amor que eu não sentia faz tempo além de me fazer o homem mais sortudo do mundo.</p>
           </div>
         </div>
         <div class="note" id="note3">
           <div class="note__eyebrow">nota 3 de 3</div>
           <div class="note__text">
-            <p>você é a melhor coisa que me aconteceu, obrigado por me escolher todos os dias.</p>
+            <p>Você é a melhor coisa que me aconteceu, obrigado por me escolher.</p>
             <p>Te amo muito! &hearts;.</p>
           </div>
         </div>
@@ -272,6 +314,13 @@
   </div>
   <div class="hint" id="hint">toque no selo de cera para abrir</div>
   <div class="signature" id="signature">Com amor, sempre.</div>
+  <div class="song-code" id="songCode">
+    <div class="song-code__label">nossa música</div>
+    <a href="https://open.spotify.com/track/6QyWVCLASvvtpKD0KJZs5e" target="_blank" rel="noopener">
+      <img src="https://scannables.scdn.co/uri/plain/svg/f7f0e2/black/640/spotify:track:6QyWVCLASvvtpKD0KJZs5e" alt="Código Spotify para tocar a música" width="152" height="152">
+    </a>
+    <a class="song-code__hint" href="https://open.spotify.com/track/6QyWVCLASvvtpKD0KJZs5e" target="_blank" rel="noopener">abrir no Spotify</a>
+  </div>
 </div>
 
 <script>
@@ -280,6 +329,7 @@
   const content = document.getElementById('content');
   const hint = document.getElementById('hint');
   const signature = document.getElementById('signature');
+  const songCode = document.getElementById('songCode');
   const notes = document.querySelectorAll('.note');
 
   seal.addEventListener('click', function onSealClick(){
@@ -312,6 +362,7 @@
           });
           if(allSeen){
             signature.classList.add('visible');
+            songCode.classList.add('visible');
           }
         });
       });
